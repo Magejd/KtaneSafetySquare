@@ -34,6 +34,7 @@ public class SafetySquareScript : MonoBehaviour
     public KMHighlightable yellowHL;
     public KMHighlightable whiteHL;
     public string[] buttonNames;
+    public KMSelectable[] buttons;
 
     //logging
     static int moduleIdCounter = 1;
@@ -52,17 +53,17 @@ public class SafetySquareScript : MonoBehaviour
     string ans3;
     string ans4;
 
-    private string[] table1col1 = new string[] { "R", "W", "Y", "B", "Y" };
-    private string[] table1col2 = new string[] { "W", "R", "W", "Y", "B" };
-    private string[] table1col3 = new string[] { "Y", "B", "R", "R", "W" };
-    private string[] table2red1 = new string[] { "R", "W", "Y", "B"};
-    private string[] table2red2 = new string[] { "R", "W", "R", "W" };
-    private string[] table2white1 = new string[] { "B", "R", "W", "Y" };
-    private string[] table2white2 = new string[] { "Y", "W", "Y", "Y" };
-    private string[] table2blue1 = new string[] { "Y", "W", "R", "B" };
-    private string[] table2blue2 = new string[] { "B", "R", "Y", "R" };
-    private string[] table2yellow1 = new string[] { "W", "Y", "R", "R" };
-    private string[] table2yellow2 = new string[] { "B", "W", "Y", "B" };
+    private readonly string[] table1col1 = new string[] { "R", "W", "Y", "B", "Y" };
+    private readonly string[] table1col2 = new string[] { "W", "R", "W", "Y", "B" };
+    private readonly string[] table1col3 = new string[] { "Y", "B", "R", "R", "W" };
+    private readonly string[] table2red1 = new string[] { "R", "W", "Y", "B"};
+    private readonly string[] table2red2 = new string[] { "R", "W", "R", "W" };
+    private readonly string[] table2white1 = new string[] { "B", "R", "W", "Y" };
+    private readonly string[] table2white2 = new string[] { "Y", "W", "Y", "Y" };
+    private readonly string[] table2blue1 = new string[] { "Y", "W", "R", "B" };
+    private readonly string[] table2blue2 = new string[] { "B", "R", "Y", "R" };
+    private readonly string[] table2yellow1 = new string[] { "W", "Y", "R", "R" };
+    private readonly string[] table2yellow2 = new string[] { "B", "W", "Y", "B" };
 
     void Awake()
     {
@@ -109,21 +110,23 @@ public class SafetySquareScript : MonoBehaviour
         { whiteText.text = "SA"; Debug.LogFormat("safteySquare #{0}: Special rule(SA): don't use co2", moduleID); }
 
         int numSum = redNum + blueNum + yellowNum;
-
+        //eeeeeee
+        Debug.LogFormat("safteySquare #{0}: This module is using manual version 1.1, you may not get correct answers with an outdated manual. check on page 4 to verify.", moduleID);
+        //eeeeeee
                                         //CLACULATING FIRE TYPE
         if (numSum < 5)
         {
-            Debug.LogFormat("safteySquare #{0}: Sum is less than 4, using table A", moduleID);
+            Debug.LogFormat("safteySquare #{0}: Sum is less than 6, using table A", moduleID);
             //left table
             if (redNum == 0)
             {fire = "B"; }
             else if (yellowNum > redNum)
             { fire = "A"; }
             else if (whiteNum == 0)
-            { fire = "K"; }
-            else if (GetComponent<KMBombInfo>().IsIndicatorOn("FRK") || GetComponent<KMBombInfo>().IsIndicatorOn("IND"))
             { fire = "C"; }
-            else { fire = "D"; }
+            else if (GetComponent<KMBombInfo>().IsIndicatorOn("FRK") || GetComponent<KMBombInfo>().IsIndicatorOn("IND"))
+            { fire = "D"; }
+            else { fire = "K"; }
         }
         else if (numSum == 5 || numSum == 6)
         {
@@ -134,10 +137,10 @@ public class SafetySquareScript : MonoBehaviour
             else if (yellowNum == blueNum)
             { fire = "B"; }
             else if (redNum == GetComponent<KMBombInfo>().GetPortPlateCount())
-            { fire = "C"; }
+            { fire = "K"; }
             else if (GetComponent<KMBombInfo>().IsIndicatorOn("CAR") || GetComponent<KMBombInfo>().IsIndicatorOn("BOB"))
             { fire = "D"; }
-            else { fire = "K"; }
+            else { fire = "C"; }
         }
         else
         {
@@ -158,7 +161,7 @@ public class SafetySquareScript : MonoBehaviour
 
         if (GetComponent<KMBombInfo>().GetSerialNumberLetters().All(x => x != 'A' && x != 'E' && x != 'I' && x != 'O' && x != 'U'))
         {
-            Debug.LogFormat("safteySquare #{0}: No Vowel found", moduleID); //NO VOWEL
+            //NO VOWEL
             if (fire == "A")
             {
                 if (whiteNum != 1)
@@ -167,7 +170,7 @@ public class SafetySquareScript : MonoBehaviour
             }
             else if (fire == "B")
             {
-                if (whiteNum !=3) { answer = 3;}
+                if (whiteNum !=2) { answer = 3;}
                 else if (whiteNum != 2) { answer = 5;}
                 else { answer = 2;}
             }
@@ -179,13 +182,15 @@ public class SafetySquareScript : MonoBehaviour
             else if (fire == "D")
             { answer = 2; }
             else { answer = 4;}
-            
         }
         else
         {
-            //VOWEL
-            Debug.Log("VOWEL DETECTED");
-            if (fire == "A") { answer = 4; }
+            //VOWEL           
+            if (fire == "A")
+            {
+                if (whiteNum != 2) { answer = 3; }
+                else { answer = 1; }
+            }
             else if (fire == "B")
             {
                 if (whiteNum != 3) { answer = 5; }
@@ -310,11 +315,20 @@ public class SafetySquareScript : MonoBehaviour
         else if (ans1 == "B") { ans3 = table2blue1[col]; ans4 = table2blue2[col]; }
         else  { ans3 = table2yellow1[col]; ans4 = table2yellow2[col]; }
         //logging
-        Debug.Log("answer 1 is: " + ans1);
-        Debug.Log("answer 2 is: " + ans2);
-        Debug.Log("answer 3 is: " + ans3);
-        Debug.Log("answer 4 is: " + ans4);
+        Debug.LogFormat("safteySquare #{0}: Answer for stage two is: {1}, {2}, {3}, {4}", moduleID, ans1, ans2, ans3, ans4);
         answer = answer++;
+        StartCoroutine(GrayOut());
+    }
+
+    private IEnumerator GrayOut()
+    {
+            foreach (KMSelectable button in buttons)
+            {
+                yield return new WaitForSeconds(0.15f);
+                button.gameObject.GetComponentInChildren<MeshRenderer>().material = ledOptions[4];
+            button.gameObject.transform.localPosition = button.gameObject.transform.localPosition + new Vector3(0f,-.0026f,0f);
+            button.GetComponentInChildren<KMHighlightable>().gameObject.SetActive(false);
+            }
     }
     void RedPress()                 //STAGE TWO BUTTONS
     {

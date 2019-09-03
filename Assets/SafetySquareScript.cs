@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using KModkit;
+using System.Text.RegularExpressions;
 
 public class SafetySquareScript : MonoBehaviour
 {
@@ -101,22 +102,22 @@ public class SafetySquareScript : MonoBehaviour
         yellowText.text = yellowNum.ToString();
         whitestrike.text = " ";
         if (whiteNum == 0)
-        { whiteText.text = " "; Debug.LogFormat("safteySquare #{0}: No special white rules", moduleID); }
+        { whiteText.text = " "; Debug.LogFormat("[Safety Square #{0}] No special white rules", moduleID); }
         else if (whiteNum == 1)
-        { whiteText.text = "W"; whitestrike.text = "_"; Debug.LogFormat("safteySquare #{0}: Special rule(W): don't use water", moduleID); }
+        { whiteText.text = "W"; whitestrike.text = "_"; Debug.LogFormat("[Safety Square #{0}] Special rule(W): don't use water", moduleID); }
         else if (whiteNum == 2)
-        { whiteText.text = "OX"; Debug.LogFormat("safteySquare #{0}: Special rule(OX): don't use foam", moduleID); }
+        { whiteText.text = "OX"; Debug.LogFormat("[Safety Square #{0}] Special rule(OX): don't use foam", moduleID); }
         else if (whiteNum == 3)
-        { whiteText.text = "SA"; Debug.LogFormat("safteySquare #{0}: Special rule(SA): don't use co2", moduleID); }
+        { whiteText.text = "SA"; Debug.LogFormat("[Safety Square #{0}] Special rule(SA): don't use co2", moduleID); }
 
         int numSum = redNum + blueNum + yellowNum;
         //eeeeeee
-        Debug.LogFormat("safteySquare #{0}: This module is using manual version 1.1, you may not get correct answers with an outdated manual. check on page 4 to verify.", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] This module is using manual version 1.1, you may not get correct answers with an outdated manual. check on page 4 to verify.", moduleID);
         //eeeeeee
-                                        //CLACULATING FIRE TYPE
+                                        //CALCULATING FIRE TYPE
         if (numSum < 5)
         {
-            Debug.LogFormat("safteySquare #{0}: Sum is less than 6, using table A", moduleID);
+            Debug.LogFormat("[Safety Square #{0}] Sum is less than 6, using table A", moduleID);
             //left table
             if (redNum == 0)
             {fire = "B"; }
@@ -130,7 +131,7 @@ public class SafetySquareScript : MonoBehaviour
         }
         else if (numSum == 5 || numSum == 6)
         {
-            Debug.LogFormat("safteySquare #{0}: Sum is 5 or 6, Using table B", moduleID);
+            Debug.LogFormat("[Safety Square #{0}] Sum is 5 or 6, Using table B", moduleID);
             //middle
             if (blueNum < 3)
             { fire = "A"; }
@@ -144,7 +145,7 @@ public class SafetySquareScript : MonoBehaviour
         }
         else
         {
-            Debug.LogFormat("safteySquare #{0}: Sum is larger than 6, using table C", moduleID);
+            Debug.LogFormat("[Safety Square #{0}] Sum is larger than 6, using table C", moduleID);
             //right
             if (GetComponent<KMBombInfo>().GetPortCount() > 4)
             { fire = "C"; }
@@ -207,8 +208,8 @@ public class SafetySquareScript : MonoBehaviour
             else { answer = 4; }
         }
         //LOGGING
-        Debug.LogFormat("safteySquare #{0}: Type {1} fire present", moduleID, fire);
-        Debug.LogFormat("safteySquare #{0}: Stage one correct extinguisher is: button {1}, {2}", moduleID, answer, buttonNames[answer]);
+        Debug.LogFormat("[Safety Square #{0}] Type {1} fire present", moduleID, fire);
+        Debug.LogFormat("[Safety Square #{0}] Stage one correct extinguisher is: button {1}, {2}", moduleID, answer, buttonNames[answer]);
 
     }
     //Button Presses
@@ -217,7 +218,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         water.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Water", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Water", moduleID);
         if (answer == 1 && stageTwo == false) { audio.PlaySoundAtTransform("fireSound", transform); Debug.LogFormat("safteySquare #{0}: That is correct", moduleID); StageTwo(); }
         else { WrongButton(); } 
     }
@@ -226,7 +227,7 @@ public class SafetySquareScript : MonoBehaviour
         if(moduleSolved) { return; }
         powder.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Powder", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Powder", moduleID);
         if (answer == 2 && stageTwo == false) { audio.PlaySoundAtTransform("fireSound", transform); Debug.LogFormat("safteySquare #{0}: That is correct", moduleID); StageTwo(); }
         else { WrongButton(); }
     }
@@ -235,7 +236,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         foam.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Foam", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Foam", moduleID);
         if (answer == 3 && stageTwo == false) { audio.PlaySoundAtTransform("fireSound", transform); Debug.LogFormat("safteySquare #{0}: That is correct", moduleID); StageTwo(); }
         else { WrongButton(); }
     }
@@ -244,7 +245,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         chem.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Wet Chemical", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Wet Chemical", moduleID);
         if (answer == 4 && stageTwo == false) { audio.PlaySoundAtTransform("fireSound", transform); Debug.LogFormat("safteySquare #{0}: That is correct", moduleID); StageTwo(); }
         else { WrongButton(); }
     }
@@ -253,7 +254,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         co2.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Co2", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Co2", moduleID);
         if (answer == 5 && stageTwo == false) { audio.PlaySoundAtTransform("fireSound", transform); Debug.LogFormat("safteySquare #{0}: That is correct", moduleID); StageTwo(); }
         else { WrongButton(); }
     }
@@ -270,7 +271,7 @@ public class SafetySquareScript : MonoBehaviour
     void StageTwo() // STAGE TWO ACTIVATED
     {
         stageTwo = true;
-        Debug.LogFormat("safteySquare #{0}: Stage one passed", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] Stage one passed!", moduleID);
         barTop.SetActive(false);
         int ledCol = UnityEngine.Random.Range(1,4);//LED COLOR
         led.material = ledOptions[ledCol];
@@ -315,7 +316,7 @@ public class SafetySquareScript : MonoBehaviour
         else if (ans1 == "B") { ans3 = table2blue1[col]; ans4 = table2blue2[col]; }
         else  { ans3 = table2yellow1[col]; ans4 = table2yellow2[col]; }
         //logging
-        Debug.LogFormat("safteySquare #{0}: Answer for stage two is: {1}, {2}, {3}, {4}", moduleID, ans1, ans2, ans3, ans4);
+        Debug.LogFormat("[Safety Square #{0}] Answer for stage two is: {1}, {2}, {3}, {4}", moduleID, ans1, ans2, ans3, ans4);
         answer = answer++;
         StartCoroutine(GrayOut());
     }
@@ -335,7 +336,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         redButton.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Red", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Red", moduleID);
         if (ans1 == "R" && stage == 1) { stage = 2; }
         else if (ans2 == "R" && stage == 2) { stage = 3; }
         else if (ans3 == "R" && stage == 3) { stage = 4; }
@@ -347,7 +348,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         blueButton.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Blue", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Blue", moduleID);
         if (ans1 == "B" && stage == 1) { stage = 2; }
         else if (ans2 == "B" && stage == 2) { stage = 3; }
         else if (ans3 == "B" && stage == 3) { stage = 4; }
@@ -359,7 +360,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         yellowButton.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed Yellow", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed Yellow", moduleID);
         if (ans1 == "Y" && stage == 1) { stage = 2; }
         else if (ans2 == "Y" && stage == 2) { stage = 3; }
         else if (ans3 == "Y" && stage == 3) { stage = 4; }
@@ -371,7 +372,7 @@ public class SafetySquareScript : MonoBehaviour
         if (moduleSolved) { return; }
         whiteButton.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        Debug.LogFormat("safteySquare #{0}: You Pressed White", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] You Pressed White", moduleID);
         if (ans1 == "W" && stage == 1) { stage = 2; }
         else if (ans2 == "W" && stage == 2) { stage = 3; }
         else if (ans3 == "W" && stage == 3) { stage = 4; }
@@ -382,17 +383,149 @@ public class SafetySquareScript : MonoBehaviour
     void WrongButton()
     {
         GetComponent<KMBombModule>().HandleStrike();
-        Debug.LogFormat("safteySquare #{0}: That is incorrect", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] That is incorrect", moduleID);
     }
 
     void Solve()                    //MODULE SOLVED
     {
         moduleSolved = true;
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
-        GetComponent<KMBombModule>().HandlePass();
         barBottom.SetActive(false);
         ledLight.SetActive(false);
         led.material = ledOptions[0];
-        Debug.LogFormat("safteySquare #{0}: Module Solved", moduleID);
+        Debug.LogFormat("[Safety Square #{0}] Module Solved!", moduleID);
+        GetComponent<KMBombModule>().HandlePass();
+    }
+
+    //twitch plays
+    private bool cmdIsValid(string param)
+    {
+        string[] parameters = param.Split(' ', ',');
+        for (int i = 1; i < parameters.Length; i++)
+        {
+            if (!parameters[i].EqualsIgnoreCase("co2") && !parameters[i].EqualsIgnoreCase("water") && !parameters[i].EqualsIgnoreCase("foam") && !parameters[i].EqualsIgnoreCase("dry") && !parameters[i].EqualsIgnoreCase("chem") && !parameters[i].EqualsIgnoreCase("red") && !parameters[i].EqualsIgnoreCase("white") && !parameters[i].EqualsIgnoreCase("blue") && !parameters[i].EqualsIgnoreCase("yellow"))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} press <button> [Presses the specified button] | !{0} press <button> <button> [Example of button chaining] | !{0} check [Outputs all made inputs in chat (this is here cause of stage 2)] | Valid buttons are CO2, Water, Dry, Foam, Chem, Red, Blue, Yellow, and White";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (Regex.IsMatch(command, @"^\s*check\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if(stageTwo == true)
+            {
+                yield return null;
+                string press = "sendtochat The following buttons have been pressed so far: ";
+                if (stage == 1)
+                {
+                    press += "none";
+                }
+                else if (stage == 2)
+                {
+                    press += ans1;
+                }
+                else if (stage == 3)
+                {
+                    press += ans1 + ", " + ans2;
+                }
+                else if (stage == 4)
+                {
+                    press += ans1 + ", " + ans2 + ", " + ans3;
+                }
+                yield return press;
+                yield break;
+            }
+            else
+            {
+                yield return "sendtochaterror You cannot check presses on Stage 1!";
+                yield break;
+            }
+        }
+        string[] parameters = command.Split(' ');
+        if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (parameters.Length > 1)
+            {
+                if (cmdIsValid(command))
+                {
+                    if(stageTwo == false)
+                    {
+                        if (parameters.Length != 2)
+                        {
+                            yield return "sendtochaterror You may only interact with one button on Stage 1!";
+                            yield break;
+                        }
+                        for (int i = 1; i < parameters.Length; i++)
+                        {
+                            if (parameters[i].EqualsIgnoreCase("white") || parameters[i].EqualsIgnoreCase("red") || parameters[i].EqualsIgnoreCase("yellow") || parameters[i].EqualsIgnoreCase("blue"))
+                            {
+                                yield return "sendtochaterror You may not interact with Stage 2 buttons yet!";
+                                yield break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i < parameters.Length; i++)
+                        {
+                            if (parameters[i].EqualsIgnoreCase("co2") || parameters[i].EqualsIgnoreCase("dry") || parameters[i].EqualsIgnoreCase("foam") || parameters[i].EqualsIgnoreCase("chem") || parameters[i].EqualsIgnoreCase("water"))
+                            {
+                                yield return "sendtochaterror You may not interact with Stage 1 buttons anymore!";
+                                yield break;
+                            }
+                        }
+                    }
+                    yield return null;
+                    for (int i = 1; i < parameters.Length; i++)
+                    {
+                        if (parameters[i].EqualsIgnoreCase("co2"))
+                        {
+                            co2.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("water"))
+                        {
+                            water.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("dry"))
+                        {
+                            powder.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("chem"))
+                        {
+                            chem.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("foam"))
+                        {
+                            foam.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("white"))
+                        {
+                            whiteButton.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("red"))
+                        {
+                            redButton.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("yellow"))
+                        {
+                            yellowButton.OnInteract();
+                        }
+                        else if (parameters[i].EqualsIgnoreCase("blue"))
+                        {
+                            blueButton.OnInteract();
+                        }
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                }
+            }
+            yield break;
+        }
     }
 }

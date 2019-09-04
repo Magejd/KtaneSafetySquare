@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +57,7 @@ public class SafetySquareScript : MonoBehaviour
     private readonly string[] table1col1 = new string[] { "R", "W", "Y", "B", "Y" };
     private readonly string[] table1col2 = new string[] { "W", "R", "W", "Y", "B" };
     private readonly string[] table1col3 = new string[] { "Y", "B", "R", "R", "W" };
-    private readonly string[] table2red1 = new string[] { "R", "W", "Y", "B"};
+    private readonly string[] table2red1 = new string[] { "R", "W", "Y", "B" };
     private readonly string[] table2red2 = new string[] { "R", "W", "R", "W" };
     private readonly string[] table2white1 = new string[] { "B", "R", "W", "Y" };
     private readonly string[] table2white2 = new string[] { "Y", "W", "Y", "Y" };
@@ -114,13 +114,13 @@ public class SafetySquareScript : MonoBehaviour
         //eeeeeee
         Debug.LogFormat("[Safety Square #{0}] This module is using manual version 1.1, you may not get correct answers with an outdated manual. check on page 4 to verify.", moduleID);
         //eeeeeee
-                                        //CALCULATING FIRE TYPE
+        //CALCULATING FIRE TYPE
         if (numSum < 5)
         {
             Debug.LogFormat("[Safety Square #{0}] Sum is less than 6, using table A", moduleID);
             //left table
             if (redNum == 0)
-            {fire = "B"; }
+            { fire = "B"; }
             else if (yellowNum > redNum)
             { fire = "A"; }
             else if (whiteNum == 0)
@@ -157,7 +157,7 @@ public class SafetySquareScript : MonoBehaviour
             { fire = "A"; }
             else { fire = "B"; }
         }
-                                                                 //CALCULATING CORRECT EXTINGIUSHER
+        //CALCULATING CORRECT EXTINGIUSHER
         //NO VOWEL
 
         if (GetComponent<KMBombInfo>().GetSerialNumberLetters().All(x => x != 'A' && x != 'E' && x != 'I' && x != 'O' && x != 'U'))
@@ -171,18 +171,18 @@ public class SafetySquareScript : MonoBehaviour
             }
             else if (fire == "B")
             {
-                if (whiteNum !=2) { answer = 3;}
-                else if (whiteNum != 2) { answer = 5;}
-                else { answer = 2;}
+                if (whiteNum != 2) { answer = 3; }
+                else if (whiteNum != 2) { answer = 5; }
+                else { answer = 2; }
             }
             else if (fire == "C")
             {
-                if (whiteNum !=2) { answer = 5;}
-                else { answer = 2;}
+                if (whiteNum != 2) { answer = 5; }
+                else { answer = 2; }
             }
             else if (fire == "D")
             { answer = 2; }
-            else { answer = 4;}
+            else { answer = 4; }
         }
         else
         {
@@ -220,11 +220,11 @@ public class SafetySquareScript : MonoBehaviour
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         Debug.LogFormat("[Safety Square #{0}] You Pressed Water", moduleID);
         if (answer == 1 && stageTwo == false) { audio.PlaySoundAtTransform("fireSound", transform); Debug.LogFormat("safteySquare #{0}: That is correct", moduleID); StageTwo(); }
-        else { WrongButton(); } 
+        else { WrongButton(); }
     }
     void PressPowder()
     {
-        if(moduleSolved) { return; }
+        if (moduleSolved) { return; }
         powder.AddInteractionPunch(.5f);
         audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         Debug.LogFormat("[Safety Square #{0}] You Pressed Powder", moduleID);
@@ -273,7 +273,7 @@ public class SafetySquareScript : MonoBehaviour
         stageTwo = true;
         Debug.LogFormat("[Safety Square #{0}] Stage one passed!", moduleID);
         barTop.SetActive(false);
-        int ledCol = UnityEngine.Random.Range(1,4);//LED COLOR
+        int ledCol = UnityEngine.Random.Range(1, 4);//LED COLOR
         led.material = ledOptions[ledCol];
         ledLight.SetActive(true);
         yellowText.text = " "; //remove square text
@@ -293,12 +293,12 @@ public class SafetySquareScript : MonoBehaviour
         answer = answer - 1;
         //calculate answer
         //ans1
-        if (ledCol == 3) 
+        if (ledCol == 3)
         { ans1 = table1col1[answer]; }
         else if (ledCol == 1) { ans1 = table1col2[answer]; }
         else { ans1 = table1col3[answer]; }
         //ans2
-        if (GetComponent<KMBombInfo>().IsIndicatorOff("BOB") || GetComponent<KMBombInfo>().IsIndicatorOff("IND")) 
+        if (GetComponent<KMBombInfo>().IsIndicatorOff("BOB") || GetComponent<KMBombInfo>().IsIndicatorOff("IND"))
         { ans2 = "W"; }
         else if (GetComponent<KMBombInfo>().GetBatteryCount() > 3)
         { ans2 = "Y"; }
@@ -307,14 +307,14 @@ public class SafetySquareScript : MonoBehaviour
         else { ans2 = "B"; }
         //ans3+4
         int col;
-        if (ans2 == "R") { col =  0; }
+        if (ans2 == "R") { col = 0; }
         else if (ans2 == "Y") { col = 1; }
         else if (ans2 == "W") { col = 2; }
-        else  { col = 3; }
+        else { col = 3; }
         if (ans1 == "R") { ans3 = table2red1[col]; ans4 = table2red2[col]; }
         else if (ans1 == "W") { ans3 = table2white1[col]; ans4 = table2white2[col]; }
         else if (ans1 == "B") { ans3 = table2blue1[col]; ans4 = table2blue2[col]; }
-        else  { ans3 = table2yellow1[col]; ans4 = table2yellow2[col]; }
+        else { ans3 = table2yellow1[col]; ans4 = table2yellow2[col]; }
         //logging
         Debug.LogFormat("[Safety Square #{0}] Answer for stage two is: {1}, {2}, {3}, {4}", moduleID, ans1, ans2, ans3, ans4);
         answer = answer++;
@@ -323,13 +323,13 @@ public class SafetySquareScript : MonoBehaviour
 
     private IEnumerator GrayOut()
     {
-            foreach (KMSelectable button in buttons)
-            {
-                yield return new WaitForSeconds(0.15f);
-                button.gameObject.GetComponentInChildren<MeshRenderer>().material = ledOptions[4];
-            button.gameObject.transform.localPosition = button.gameObject.transform.localPosition + new Vector3(0f,-.0026f,0f);
+        foreach (KMSelectable button in buttons)
+        {
+            yield return new WaitForSeconds(0.15f);
+            button.gameObject.GetComponentInChildren<MeshRenderer>().material = ledOptions[4];
+            button.gameObject.transform.localPosition = button.gameObject.transform.localPosition + new Vector3(0f, -.0026f, 0f);
             button.GetComponentInChildren<KMHighlightable>().gameObject.SetActive(false);
-            }
+        }
     }
     void RedPress()                 //STAGE TWO BUTTONS
     {
@@ -403,7 +403,10 @@ public class SafetySquareScript : MonoBehaviour
         string[] parameters = param.Split(' ', ',');
         for (int i = 1; i < parameters.Length; i++)
         {
-            if (!parameters[i].EqualsIgnoreCase("co2") && !parameters[i].EqualsIgnoreCase("water") && !parameters[i].EqualsIgnoreCase("foam") && !parameters[i].EqualsIgnoreCase("dry") && !parameters[i].EqualsIgnoreCase("chem") && !parameters[i].EqualsIgnoreCase("red") && !parameters[i].EqualsIgnoreCase("white") && !parameters[i].EqualsIgnoreCase("blue") && !parameters[i].EqualsIgnoreCase("yellow"))
+            if (!parameters[i].EqualsIgnoreCase("co2") && !parameters[i].EqualsIgnoreCase("water") && !parameters[i].EqualsIgnoreCase("foam") && !parameters[i].EqualsIgnoreCase("dry") && !parameters[i].EqualsIgnoreCase("chem")
+                && !parameters[i].EqualsIgnoreCase("red") && !parameters[i].EqualsIgnoreCase("white") && !parameters[i].EqualsIgnoreCase("blue") && !parameters[i].EqualsIgnoreCase("yellow") 
+                && !parameters[i].EqualsIgnoreCase("powder") && !parameters[i].EqualsIgnoreCase("drypowder") && !parameters[i].EqualsIgnoreCase("wet") && !parameters[i].EqualsIgnoreCase("chemical") && !parameters[i].EqualsIgnoreCase("wetchemical") && !parameters[i].EqualsIgnoreCase("carbon")
+                 && !parameters[i].EqualsIgnoreCase("r") && !parameters[i].EqualsIgnoreCase("b") && !parameters[i].EqualsIgnoreCase("y") && !parameters[i].EqualsIgnoreCase("w") )
             {
                 return false;
             }
@@ -411,15 +414,15 @@ public class SafetySquareScript : MonoBehaviour
         return true;
     }
 
-    #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} press <button> [Presses the specified button] | !{0} press <button> <button> [Example of button chaining] | !{0} check [Outputs all made inputs in chat (this is here cause of stage 2)] | Valid buttons are CO2, Water, Dry, Foam, Chem, Red, Blue, Yellow, and White";
-    #pragma warning restore 414
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} press <button> [Presses the specified button] | !{0} press <button> <button> [Example of button chaining] | !{0} check [Outputs all made inputs in chat (this is here cause of stage 2)] | Valid buttons are CO2, Water, Dry(Or: Powder, Drypowder), Foam, Chem(Or: Wet, Chemical, Wetchemical), Red(R), Blue(B), Yellow(Y), and White(W)";
+#pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
     {
         if (Regex.IsMatch(command, @"^\s*check\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
-            if(stageTwo == true)
+            if (stageTwo == true)
             {
                 yield return null;
                 string press = "sendtochat The following buttons have been pressed so far: ";
@@ -455,7 +458,7 @@ public class SafetySquareScript : MonoBehaviour
             {
                 if (cmdIsValid(command))
                 {
-                    if(stageTwo == false)
+                    if (stageTwo == false)
                     {
                         if (parameters.Length != 2)
                         {
@@ -464,7 +467,8 @@ public class SafetySquareScript : MonoBehaviour
                         }
                         for (int i = 1; i < parameters.Length; i++)
                         {
-                            if (parameters[i].EqualsIgnoreCase("white") || parameters[i].EqualsIgnoreCase("red") || parameters[i].EqualsIgnoreCase("yellow") || parameters[i].EqualsIgnoreCase("blue"))
+                            if (parameters[i].EqualsIgnoreCase("white") || parameters[i].EqualsIgnoreCase("red") || parameters[i].EqualsIgnoreCase("yellow") || parameters[i].EqualsIgnoreCase("blue")
+                                || parameters[i].EqualsIgnoreCase("r") || parameters[i].EqualsIgnoreCase("b") || parameters[i].EqualsIgnoreCase("y") || parameters[i].EqualsIgnoreCase("w"))
                             {
                                 yield return "sendtochaterror You may not interact with Stage 2 buttons yet!";
                                 yield break;
@@ -475,7 +479,8 @@ public class SafetySquareScript : MonoBehaviour
                     {
                         for (int i = 1; i < parameters.Length; i++)
                         {
-                            if (parameters[i].EqualsIgnoreCase("co2") || parameters[i].EqualsIgnoreCase("dry") || parameters[i].EqualsIgnoreCase("foam") || parameters[i].EqualsIgnoreCase("chem") || parameters[i].EqualsIgnoreCase("water"))
+                            if (parameters[i].EqualsIgnoreCase("co2") || parameters[i].EqualsIgnoreCase("dry") || parameters[i].EqualsIgnoreCase("foam") || parameters[i].EqualsIgnoreCase("chem") || parameters[i].EqualsIgnoreCase("water")
+                                || parameters[i].EqualsIgnoreCase("powder") || parameters[i].EqualsIgnoreCase("drypowder") || parameters[i].EqualsIgnoreCase("wet") || parameters[i].EqualsIgnoreCase("chemical") || parameters[i].EqualsIgnoreCase("wetchemical") || parameters[i].EqualsIgnoreCase("carbon") )
                             {
                                 yield return "sendtochaterror You may not interact with Stage 1 buttons anymore!";
                                 yield break;
@@ -485,7 +490,7 @@ public class SafetySquareScript : MonoBehaviour
                     yield return null;
                     for (int i = 1; i < parameters.Length; i++)
                     {
-                        if (parameters[i].EqualsIgnoreCase("co2"))
+                        if (parameters[i].EqualsIgnoreCase("co2") || parameters[i].EqualsIgnoreCase("carbon"))
                         {
                             co2.OnInteract();
                         }
@@ -493,11 +498,11 @@ public class SafetySquareScript : MonoBehaviour
                         {
                             water.OnInteract();
                         }
-                        else if (parameters[i].EqualsIgnoreCase("dry"))
+                        else if (parameters[i].EqualsIgnoreCase("dry") || parameters[i].EqualsIgnoreCase("powder") || parameters[i].EqualsIgnoreCase("drypowder"))
                         {
                             powder.OnInteract();
                         }
-                        else if (parameters[i].EqualsIgnoreCase("chem"))
+                        else if (parameters[i].EqualsIgnoreCase("chem") || parameters[i].EqualsIgnoreCase("wet") || parameters[i].EqualsIgnoreCase("chemical") || parameters[i].EqualsIgnoreCase("wetchemical"))
                         {
                             chem.OnInteract();
                         }
@@ -505,19 +510,19 @@ public class SafetySquareScript : MonoBehaviour
                         {
                             foam.OnInteract();
                         }
-                        else if (parameters[i].EqualsIgnoreCase("white"))
+                        else if (parameters[i].EqualsIgnoreCase("white") || parameters[i].EqualsIgnoreCase("w"))
                         {
                             whiteButton.OnInteract();
                         }
-                        else if (parameters[i].EqualsIgnoreCase("red"))
+                        else if (parameters[i].EqualsIgnoreCase("red") || parameters[i].EqualsIgnoreCase("r"))
                         {
                             redButton.OnInteract();
                         }
-                        else if (parameters[i].EqualsIgnoreCase("yellow"))
+                        else if (parameters[i].EqualsIgnoreCase("yellow") || parameters[i].EqualsIgnoreCase("y"))
                         {
                             yellowButton.OnInteract();
                         }
-                        else if (parameters[i].EqualsIgnoreCase("blue"))
+                        else if (parameters[i].EqualsIgnoreCase("blue") || parameters[i].EqualsIgnoreCase("b"))
                         {
                             blueButton.OnInteract();
                         }

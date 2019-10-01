@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,8 +63,8 @@ public class SafetySquareScript : MonoBehaviour
     private readonly string[] table2white2 = new string[] { "Y", "W", "Y", "Y" };
     private readonly string[] table2blue1 = new string[] { "Y", "W", "R", "B" };
     private readonly string[] table2blue2 = new string[] { "B", "R", "Y", "R" };
-    private readonly string[] table2yellow1 = new string[] { "W", "Y", "R", "R" };
-    private readonly string[] table2yellow2 = new string[] { "B", "W", "Y", "B" };
+    private readonly string[] table2yellow1 = new string[] { "W", "Y", "B", "R" };
+    private readonly string[] table2yellow2 = new string[] { "B", "W", "B", "B" };
 
     void Awake()
     {
@@ -101,6 +101,7 @@ public class SafetySquareScript : MonoBehaviour
         blueText.text = blueNum.ToString();
         yellowText.text = yellowNum.ToString();
         whitestrike.text = " ";
+        Debug.LogFormat("[Safety Square #{0}] Square numbers are (Bu,Rd,Yl): {1}, {2}, {3}.", moduleID, blueNum, redNum, yellowNum);
         if (whiteNum == 0)
         { whiteText.text = " "; Debug.LogFormat("[Safety Square #{0}] No special white rules", moduleID); }
         else if (whiteNum == 1)
@@ -109,11 +110,10 @@ public class SafetySquareScript : MonoBehaviour
         { whiteText.text = "OX"; Debug.LogFormat("[Safety Square #{0}] Special rule(OX): don't use foam", moduleID); }
         else if (whiteNum == 3)
         { whiteText.text = "SA"; Debug.LogFormat("[Safety Square #{0}] Special rule(SA): don't use co2", moduleID); }
+        
 
         int numSum = redNum + blueNum + yellowNum;
-        //eeeeeee
-        Debug.LogFormat("[Safety Square #{0}] This module is using manual version 1.1, you may not get correct answers with an outdated manual. check on page 4 to verify.", moduleID);
-        //eeeeeee
+        Debug.LogFormat("[Safety Square #{0}] This module is using manual version 1.2, you may not get correct answers with an outdated manual. check on page 4 to verify.", moduleID);
         //CALCULATING FIRE TYPE
         if (numSum < 5)
         {
@@ -165,23 +165,25 @@ public class SafetySquareScript : MonoBehaviour
             //NO VOWEL
             if (fire == "A")
             {
-                if (whiteNum != 1)
-                { answer = 1; }
-                else { answer = 3; }
+                if (whiteText.text != "W") { answer = 1; }
+                else if (whiteText.text != "OX") { answer = 3; }
+                else { answer = 4; }
             }
             else if (fire == "B")
             {
-                if (whiteNum != 2) { answer = 3; }
-                else if (whiteNum != 2) { answer = 5; }
+                if (whiteText.text != "OX") { answer = 3; }
+                else if (whiteText.text != "SA") { answer = 5; }
                 else { answer = 2; }
             }
             else if (fire == "C")
             {
-                if (whiteNum != 2) { answer = 5; }
+                if (whiteText.text != "SA") { answer = 5; }
                 else { answer = 2; }
             }
             else if (fire == "D")
-            { answer = 2; }
+            {
+                answer = 2;
+            }
             else { answer = 4; }
         }
         else
@@ -189,22 +191,25 @@ public class SafetySquareScript : MonoBehaviour
             //VOWEL           
             if (fire == "A")
             {
-                if (whiteNum != 2) { answer = 3; }
-                else { answer = 1; }
+                if (whiteText.text != "OX") { answer = 3; }
+                else if (whiteText.text != "W") { answer = 1; }
+                else { answer = 4; }
             }
             else if (fire == "B")
             {
-                if (whiteNum != 3) { answer = 5; }
-                else if (whiteNum != 2) { answer = 3; }
+                if (whiteText.text != "SA") { answer = 5; }
+                else if (whiteText.text != "OX") { answer = 3; }
                 else { answer = 2; }
             }
             else if (fire == "C")
             {
-                if (whiteNum != 3) { answer = 5; }
+                if (whiteText.text != "SA") { answer = 5; }
                 else { answer = 2; }
             }
             else if (fire == "D")
-            { answer = 2; }
+            {
+                answer = 2;
+            }
             else { answer = 4; }
         }
         //LOGGING
